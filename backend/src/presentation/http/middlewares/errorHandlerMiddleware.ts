@@ -1,0 +1,23 @@
+import { Request, Response, NextFunction } from 'express';
+import { DomainError } from '../../../domain/errors/DomainError';
+
+export function errorHandlerMiddleware(
+  err: Error,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) {
+  if (err instanceof DomainError) {
+    return res.status(err.statusCode).json({
+      error: err.message,
+      type: err.constructor.name
+    });
+  }
+
+  console.error('Unhandled server error:', err);
+
+  return res.status(500).json({
+    error: 'Erro interno do servidor',
+    type: 'InternalServerError'
+  });
+}
