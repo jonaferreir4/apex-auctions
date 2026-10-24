@@ -1,0 +1,95 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  LEILOEIRO
+  LICITANTE
+}
+
+enum LotStatus {
+  AGENDADO
+  AO_VIVO
+  ENCERRADO
+  CANCELADO
+}
+
+model User {
+  id               String    @id @default(uuid())
+  name             String
+  email            String    @unique
+  password         String
+  role             Role      @default(LICITANTE)
+  totalBalance     Float     @default(0.0)
+  committedBalance Float     @default(0.0)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  lotsCreated      Lot[]     @relation("AuctioneerLots")
+  lotsLeading      Lot[]     @relation("LeaderLots")
+  bids             Bid[]
+  receipts         Receipt[]
+
+  @@map("users")
+}
+
+model Lot {
+  id              String     @id @default(uuid())
+  title           String
+  description     String
+  imageUrl        String
+  category        String     @default("Geral")
+  itemAttributes  Json?
+  status          LotStatus  @default(AGENDADO)
+  initialPrice    Float
+  minIncrement    Float
+  currentPrice    Float
+  currentLeaderId String?
+  auctioneerId    String
+  startTime       DateTime
+  endTime         DateTime
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  auctioneer      User       @relation("AuctioneerLots", fields: [auctioneerId], references: [id])
+  currentLeader   User?      @relation("LeaderLots", fields: [currentLeaderId], references: [id])
+  bids            Bid[]
+  receipt         Receipt?
+
+  @@map("lots")
+}
+
+model Bid {
+  id           String   @id @default(uuid())
+  lotId        String
+  bidderId     String
+  amount       Float
+  previousHash String
+  hash         String
+  createdAt    DateTime @default(now())
+
+  lot          Lot      @relation(fields: [lotId], references: [id], onDelete: Cascade)
+  bidder       User     @relation(fields: [bidderId], references: [id], onDelete: Cascade)
+
+  @@index([lotId, createdAt])
+  @@map("bids")
+}
+
+model Receipt {
+  id          String   @id @default(uuid())
+  lotId       String   @unique
+  winnerId    String
+  finalAmount Float
+  shareToken  String   @unique @default(uuid())
+  createdAt   DateTime @default(now())
+
+  lot         Lot      @relation(fields: [lotId], references: [id], onDelete: Cascade)
+  winner      User     @relation(fields: [winnerId], references: [id], onDelete: Cascade)
+
+  @@map("receipts")
+}
