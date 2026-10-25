@@ -1,0 +1,245 @@
+{
+  "info": {
+    "name": "Casa de Leilões Verzel - API",
+    "description": "Collection completa para testar todos os endpoints da Casa de Leilões no Postman.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3001" },
+    { "key": "token", "value": "" },
+    { "key": "lotId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login Leiloeiro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) { pm.collectionVariables.set('token', json.token); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"leiloeiro@verzel.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login Licitante 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) { pm.collectionVariables.set('token', json.token); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"licitante1@verzel.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login Licitante 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) { pm.collectionVariables.set('token', json.token); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"licitante2@verzel.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Meu Perfil (/auth/me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lots",
+      "item": [
+        {
+          "name": "Listar Vitrine de Lotes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (Array.isArray(json) && json.length > 0) {",
+                  "  pm.collectionVariables.set('lotId', json[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lots"
+          }
+        },
+        {
+          "name": "Detalhes do Lote",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lots/{{lotId}}"
+          }
+        },
+        {
+          "name": "Criar Lote (Leiloeiro)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Relógio Cronógrafo Suíço Vintage 1968\",\n  \"description\": \"Peça de alta relojoaria com mecanismo mecânico automático em ouro 18k.\",\n  \"imageUrl\": \"https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=800\",\n  \"category\": \"Relógios & Joias\",\n  \"initialPrice\": 4800,\n  \"minIncrement\": 300,\n  \"startTime\": \"2026-10-24T20:00:00.000Z\",\n  \"endTime\": \"2026-10-25T20:00:00.000Z\"\n}"
+            },
+            "url": "{{baseUrl}}/api/lots"
+          }
+        },
+        {
+          "name": "Cancelar Lote (Leiloeiro)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/lots/{{lotId}}/cancel"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bids & Auditoria",
+      "item": [
+        {
+          "name": "Histórico de Lances do Lote",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lots/{{lotId}}/bids"
+          }
+        },
+        {
+          "name": "Dar Lance (Licitante)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 3200\n}"
+            },
+            "url": "{{baseUrl}}/api/lots/{{lotId}}/bids"
+          }
+        },
+        {
+          "name": "Auditoria Criptográfica (Pública)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lots/{{lotId}}/audit"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wallet",
+      "item": [
+        {
+          "name": "Consultar Saldo da Carteira",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/wallet"
+          }
+        },
+        {
+          "name": "Depósito Simulado",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 5000\n}"
+            },
+            "url": "{{baseUrl}}/api/wallet/deposit"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Receipts & External Items",
+      "item": [
+        {
+          "name": "Meus Arremates (Comprovantes)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/receipts/me"
+          }
+        },
+        {
+          "name": "Comprovante Público por Token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/receipts/share/recibo-demo-dom-casmurro-1899"
+          }
+        },
+        {
+          "name": "Buscar Itens na API Externa",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/items/search?q=watch"
+          }
+        }
+      ]
+    }
+  ]
+}
