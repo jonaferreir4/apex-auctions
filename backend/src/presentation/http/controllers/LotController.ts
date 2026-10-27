@@ -34,17 +34,35 @@ export class LotController {
 
   list = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-      const { status, category, search, auctioneerId, excludeCanceled } = req.query;
+      const { status, category, search, auctioneerId, excludeCanceled, page, limit } = req.query;
 
       const lots = await this.listLotsUseCase.execute({
         status: status as LotStatus | undefined,
         category: category as string | undefined,
         search: search as string | undefined,
         auctioneerId: auctioneerId as string | undefined,
-        excludeCanceled: excludeCanceled !== 'false'
+        excludeCanceled: excludeCanceled !== 'false',
+        page: page ? Math.max(1, parseInt(page as string, 10)) : undefined,
+        limit: limit ? Math.max(1, parseInt(limit as string, 10)) : undefined
       });
 
       return res.status(200).json(lots);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  getCategories = async (_req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const result = await this.listLotsUseCase.execute({ excludeCanceled: true });
+      const lots = Array.isArray(result) ? result : result.data;
+      const set = new Set<string>();
+      lots.forEach((lot: any) => {
+        if (lot.category && lot.category.trim()) {
+          set.add(lot.category.trim());
+        }
+      });
+      return res.status(200).json(Array.from(set).sort());
     } catch (err) {
       next(err);
     }

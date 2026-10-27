@@ -8,6 +8,7 @@ export function createLotRoutes(lotController: LotController, tokenService: ITok
   const authMiddleware = createAuthMiddleware(tokenService);
 
   router.get('/', lotController.list);
+  router.get('/categories', lotController.getCategories);
   router.get('/my-lots', authMiddleware, lotController.getMyLots);
   router.get('/:id', lotController.getById);
   router.post('/', authMiddleware, lotController.create);

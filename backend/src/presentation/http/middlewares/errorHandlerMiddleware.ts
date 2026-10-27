@@ -5,8 +5,12 @@ export function errorHandlerMiddleware(
   err: Error,
   _req: Request,
   res: Response,
-  _next: NextFunction
+  next: NextFunction
 ) {
+  if (res.headersSent) {
+    return next(err);
+  }
+
   if (err instanceof DomainError) {
     return res.status(err.statusCode).json({
       error: err.message,
@@ -16,8 +20,12 @@ export function errorHandlerMiddleware(
 
   console.error('Unhandled server error:', err);
 
-  return res.status(500).json({
-    error: 'Erro interno do servidor',
-    type: 'InternalServerError'
-  });
+  if (typeof res.status === 'function') {
+    return res.status(500).json({
+      error: 'Erro interno do servidor',
+      type: 'InternalServerError'
+    });
+  }
+
+  next(err);
 }
