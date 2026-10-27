@@ -1,9 +1,11 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { useAuthStore } from '@/entities/user/model/useAuthStore';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const cleanOrigin = rawApiUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
 
 export const httpClient = axios.create({
-  baseURL: `${API_URL}/api`,
+  baseURL: `${cleanOrigin}/api`,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
@@ -11,7 +13,7 @@ export const httpClient = axios.create({
 });
 
 httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = localStorage.getItem('@leilao:token');
+  const token = useAuthStore.getState().token;
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -19,9 +21,16 @@ httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 });
 
 httpClient.interceptors.response.use(
-  response => response,
+  (response) => response,
   (error: AxiosError<{ error?: string; message?: string }>) => {
-    const message = error.response?.data?.error || error.response?.data?.message || error.message || 'Erro inesperado na requisição';
+    if (error.response?.status === 401) {
+      useAuthStore.getState().logout();
+    }
+    const message =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      error.message ||
+      'Erro inesperado na requisição';
     return Promise.reject(new Error(message));
   }
 );

@@ -12,11 +12,6 @@ export function getSocket(): Socket {
       reconnectionAttempts: 5,
       reconnectionDelay: 1000
     });
-
-    const token = localStorage.getItem('@leilao:token');
-    if (token) {
-      socketInstance.emit('auth_user', { token });
-    }
   }
 
   return socketInstance;
@@ -25,6 +20,13 @@ export function getSocket(): Socket {
 export function authenticateSocket(token: string): void {
   const socket = getSocket();
   socket.emit('auth_user', { token });
+}
+
+export function disconnectSocket(): void {
+  if (socketInstance) {
+    socketInstance.disconnect();
+    socketInstance = null;
+  }
 }
 
 export function joinLotRoom(lotId: string): void {

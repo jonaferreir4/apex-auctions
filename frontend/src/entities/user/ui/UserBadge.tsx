@@ -8,33 +8,24 @@ export interface UserBadgeProps {
 
 export function UserBadge({ user }: UserBadgeProps) {
   const initial = user.name.charAt(0).toUpperCase();
+  const roleLabel = user.role === 'LEILOEIRO' ? 'Leiloeiro' : 'Licitante';
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+    <div className="flex items-center gap-2">
       <div
-        style={{
-          width: '34px',
-          height: '34px',
-          borderRadius: '50%',
-          backgroundColor: user.role === 'LEILOEIRO' ? 'var(--accent-gold)' : 'var(--primary)',
-          color: '#ffffff',
-          fontWeight: 700,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '0.9rem',
-          boxShadow: user.role === 'LEILOEIRO' ? '0 0 10px var(--accent-gold-glow)' : 'var(--shadow-glow)'
-        }}
+        className={`w-8 h-8 rounded-full text-white font-bold flex items-center justify-center text-xs shadow-xs ${
+          user.role === 'LEILOEIRO' ? 'bg-amber-600' : 'bg-blue-600'
+        }`}
       >
         {initial}
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>{user.name}</span>
+      <div className="flex flex-col leading-tight">
+        <span className="text-xs font-semibold text-slate-900 dark:text-slate-100">{user.name}</span>
         <Badge
           variant={user.role === 'LEILOEIRO' ? 'warning' : 'info'}
-          style={{ fontSize: '0.65rem', padding: '0.1rem 0.4rem', width: 'fit-content' }}
+          className="text-[10px] py-0 px-1.5 w-fit mt-0.5"
         >
-          {user.role}
+          {roleLabel}
         </Badge>
       </div>
     </div>
