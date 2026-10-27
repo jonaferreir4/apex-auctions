@@ -50,7 +50,7 @@ export function Logo({
       </svg>
 
       {showWordmark && showSubtext && (
-        <span className="self-center pl-2 text-[11px] font-bold tracking-widest uppercase border-l border-slate-300 text-slate-500 dark:border-slate-700 dark:text-slate-400">
+        <span className="hidden sm:inline-block self-center pl-2 text-[11px] font-bold tracking-widest uppercase border-l border-slate-300 text-slate-500 dark:border-slate-700 dark:text-slate-400">
           auctions
         </span>
       )}

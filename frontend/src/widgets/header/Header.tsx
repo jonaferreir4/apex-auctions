@@ -229,55 +229,34 @@ export function Header({ user, onLogout }: HeaderProps) {
             </div>
           </nav>
 
-          <div className="flex md:hidden items-center gap-1.5 shrink-0">
+          <div className="flex md:hidden items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-              className="w-9 h-9 rounded-md flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              className="w-9 h-9 rounded-md flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               title="Buscar lotes"
               aria-label="Buscar"
             >
-              <Search size={18} />
+              <Search size={19} />
             </button>
 
-            <ThemeToggle />
-
-            {user ? (
-              <button
-                type="button"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="flex items-center gap-1 p-1 rounded-md text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                aria-label="Menu do usuário"
-              >
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="flex items-center gap-1.5 py-1 px-2 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              aria-label="Menu de navegação"
+            >
+              {user && (
                 <div
-                  className={`w-7 h-7 rounded-full text-white font-bold flex items-center justify-center text-xs ${
+                  className={`w-6 h-6 rounded-full text-white font-bold flex items-center justify-center text-[10px] ${
                     user.role === 'LEILOEIRO' ? 'bg-amber-600' : 'bg-blue-600'
                   }`}
                 >
                   {user.name.charAt(0).toUpperCase()}
                 </div>
-                {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-              </button>
-            ) : (
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => navigate('/login')}
-                  className="h-8 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-semibold inline-flex items-center justify-center whitespace-nowrap transition-colors cursor-pointer shadow-xs"
-                >
-                  Entrar
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="w-8 h-8 rounded-md flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                  aria-label="Abrir menu"
-                >
-                  {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-                </button>
-              </div>
-            )}
+              )}
+              {isMobileMenuOpen ? <X size={19} /> : <Menu size={19} />}
+            </button>
           </div>
         </div>
 
@@ -306,8 +285,15 @@ export function Header({ user, onLogout }: HeaderProps) {
         )}
 
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-4 space-y-4 shadow-lg animate-fadeIn">
-            {user && (
+          <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-4 space-y-3.5 shadow-lg animate-fadeIn">
+            <div className="flex items-center justify-between px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700/60">
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                Aparência (Claro / Escuro)
+              </span>
+              <ThemeToggle />
+            </div>
+
+            {user ? (
               <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700/60">
                 <div
                   className={`w-10 h-10 rounded-full text-white font-bold flex items-center justify-center text-sm shrink-0 ${
@@ -328,6 +314,18 @@ export function Header({ user, onLogout }: HeaderProps) {
                   </span>
                 </div>
               </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  navigate('/login');
+                }}
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-xs cursor-pointer"
+              >
+                <LogIn size={16} />
+                Entrar / Cadastrar
+              </button>
             )}
 
             {isBidder && (
@@ -407,33 +405,21 @@ export function Header({ user, onLogout }: HeaderProps) {
               )}
             </div>
 
-            <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
-              {user ? (
+            {user && (
+              <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     onLogout();
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 rounded-md hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 rounded-md hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors cursor-pointer"
                 >
                   <LogOut size={14} />
                   Sair da Conta
                 </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    navigate('/login');
-                  }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors shadow-xs"
-                >
-                  <LogIn size={14} />
-                  Entrar ou Criar Conta
-                </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         )}
       </header>
