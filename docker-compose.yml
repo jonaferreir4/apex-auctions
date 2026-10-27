@@ -11,6 +11,43 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d leilao_verzel"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: verzel_backend
+    restart: always
+    environment:
+      PORT: 3001
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/leilao_verzel?schema=public"
+      JWT_SECRET: "verzel_super_secret_jwt_key_elite_dev_2026"
+      JWT_EXPIRES_IN: "24h"
+      CORS_ORIGIN: "http://localhost:5173,http://localhost:3000,http://localhost:80,http://localhost"
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: "http://localhost:3001/api"
+        VITE_SOCKET_URL: "http://localhost:3001"
+    container_name: verzel_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
 
 volumes:
   pgdata:
