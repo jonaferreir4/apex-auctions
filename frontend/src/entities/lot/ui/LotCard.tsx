@@ -1,9 +1,9 @@
 import React from 'react';
 import { Lot } from '../types';
-import { Card } from '@/shared/ui/Card';
 import { LotStatusBadge } from './LotStatusBadge';
 import { LotCountdown } from './LotCountdown';
 import { formatBRL } from '@/shared/lib/formatters';
+import { ArrowRight } from 'lucide-react';
 
 export interface LotCardProps {
   lot: Lot;
@@ -12,84 +12,72 @@ export interface LotCardProps {
 
 export function LotCard({ lot, onClick }: LotCardProps) {
   const displayPrice = lot.currentPrice > 0 ? lot.currentPrice : lot.initialPrice;
-  const priceLabel = lot.currentPrice > 0 ? 'Lance Atual' : 'Lance Inicial';
+  const priceLabel = lot.currentPrice > 0 ? 'LICITAÇÃO ATUAL' : 'LANCE INICIAL';
 
   return (
-    <Card
-      hoverable
+    <div
       onClick={onClick}
-      style={{
-        padding: 0,
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        border: lot.status === 'AO_VIVO' ? '1px solid rgba(16, 185, 129, 0.4)' : undefined,
-        boxShadow: lot.status === 'AO_VIVO' ? '0 0 20px rgba(16, 185, 129, 0.15)' : undefined
-      }}
+      className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-xs hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 overflow-hidden flex flex-col cursor-pointer transition-all duration-150 group"
     >
-      <div style={{ position: 'relative', width: '100%', height: '200px', overflow: 'hidden' }}>
+      <div className="relative w-full h-52 bg-slate-100 dark:bg-slate-800 overflow-hidden">
         <img
           src={lot.imageUrl}
           alt={lot.title}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
-        <div style={{ position: 'absolute', top: '0.75rem', left: '0.75rem' }}>
+
+        <div className="absolute top-2.5 left-2.5">
           <LotStatusBadge status={lot.status} />
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '0.75rem',
-            left: '0.75rem',
-            backgroundColor: 'rgba(0,0,0,0.7)',
-            backdropFilter: 'blur(4px)',
-            padding: '0.2rem 0.6rem',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '0.75rem',
-            fontWeight: 600,
-            color: '#fff'
-          }}
-        >
-          {lot.category}
         </div>
       </div>
 
-      <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
+      <div className="p-4 flex flex-col flex-1 justify-between">
         <div>
-          <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', lineHeight: 1.3 }}>
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1 leading-snug line-clamp-2">
             {lot.title}
-          </h4>
-          <p
-            style={{
-              fontSize: '0.85rem',
-              color: 'var(--text-secondary)',
-              lineHeight: 1.4,
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden'
-            }}
-          >
+          </h3>
+
+          <p className="text-xs text-slate-600 dark:text-slate-400 m-0 leading-relaxed line-clamp-2">
             {lot.description}
           </p>
         </div>
 
-        <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-          <div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>{priceLabel}</span>
-            <span style={{ fontSize: '1.25rem', fontWeight: 800, color: lot.status === 'AO_VIVO' ? 'var(--status-live)' : 'var(--text-primary)' }}>
-              {formatBRL(displayPrice)}
-            </span>
-          </div>
-          {lot.status === 'AO_VIVO' && (
-            <div style={{ textAlign: 'right' }}>
-              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.1rem' }}>Encerra em</span>
-              <LotCountdown endTime={lot.endTime} />
+        <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800">
+          <div className="flex items-end justify-between">
+            <div>
+              <span className="text-[10px] text-slate-400 dark:text-slate-500 block font-semibold tracking-wider">
+                {priceLabel}
+              </span>
+              <span className="text-lg font-extrabold text-slate-900 dark:text-slate-100 leading-none">
+                {formatBRL(displayPrice)}
+              </span>
             </div>
-          )}
+
+            <div className="text-right">
+              {lot.status === 'AO_VIVO' ? (
+                <div>
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500 block">Restante</span>
+                  <LotCountdown endTime={lot.endTime} />
+                </div>
+              ) : lot.status === 'AGENDADO' ? (
+                <span className="text-xs text-slate-500 font-medium">
+                  Em breve
+                </span>
+              ) : (
+                <span className="text-xs text-slate-500 font-medium">
+                  Encerrado
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400 group-hover:text-blue-700">
+            <span>{lot.status === 'AO_VIVO' ? 'Participar do Pregão' : 'Ver Detalhes do Lote'}</span>
+            <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+          </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

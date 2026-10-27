@@ -27,20 +27,17 @@ export function LotCountdown({ endTime, onExpire }: LotCountdownProps) {
 
   return (
     <div
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '0.4rem',
-        fontSize: '0.85rem',
-        fontFamily: 'var(--font-mono)',
-        fontWeight: 700,
-        color: isUrgent ? 'var(--danger)' : timeLeft.isExpired ? 'var(--text-muted)' : 'var(--text-primary)',
-        animation: isUrgent ? 'pulse 1s infinite' : 'none'
-      }}
+      className={`inline-flex items-center gap-1.5 text-xs font-mono font-bold ${
+        isUrgent
+          ? 'text-red-600 animate-pulse'
+          : timeLeft.isExpired
+          ? 'text-slate-400'
+          : 'text-slate-900 dark:text-slate-100'
+      }`}
     >
-      <Clock size={15} color={isUrgent ? 'var(--danger)' : 'currentColor'} />
+      <Clock size={14} className={isUrgent ? 'text-red-600' : 'text-current'} />
       <span>{timeLeft.formatted}</span>
-      {isUrgent && <span style={{ fontSize: '0.7rem', color: 'var(--danger)' }}>(+2m sniper)</span>}
+      {isUrgent && <span className="text-[10px] text-red-600 font-semibold">(Últimos minutos)</span>}
     </div>
   );
 }

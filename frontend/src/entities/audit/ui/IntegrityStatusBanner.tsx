@@ -10,38 +10,15 @@ export interface IntegrityStatusBannerProps {
 export function IntegrityStatusBanner({ isVerified, message, tamperedIndex }: IntegrityStatusBannerProps) {
   if (isVerified) {
     return (
-      <div
-        className="glass-panel"
-        style={{
-          padding: '1.5rem',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
-          borderColor: 'rgba(16, 185, 129, 0.4)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1rem',
-          boxShadow: '0 0 25px rgba(16, 185, 129, 0.15)'
-        }}
-      >
-        <div
-          style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '50%',
-            backgroundColor: 'var(--status-live)',
-            color: '#fff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0
-          }}
-        >
-          <ShieldCheck size={28} />
+      <div className="p-5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 rounded-xl flex items-center gap-4 shadow-xs">
+        <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
+          <ShieldCheck size={24} />
         </div>
         <div>
-          <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--status-live)', margin: '0 0 0.25rem 0' }}>
-            Auditoria Concluída: Histórico 100% Íntegro
-          </h4>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', margin: 0, opacity: 0.9 }}>
+          <h3 className="text-base font-extrabold text-emerald-800 dark:text-emerald-300 m-0 mb-1">
+            Auditoria Concluída: Histórico 100% Autêntico e Íntegro
+          </h3>
+          <p className="text-xs text-slate-600 dark:text-slate-400 m-0 leading-relaxed">
             {message}
           </p>
         </div>
@@ -50,38 +27,15 @@ export function IntegrityStatusBanner({ isVerified, message, tamperedIndex }: In
   }
 
   return (
-    <div
-      className="glass-panel"
-      style={{
-        padding: '1.5rem',
-        backgroundColor: 'rgba(239, 68, 68, 0.12)',
-        borderColor: 'var(--danger)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '1rem',
-        boxShadow: '0 0 25px rgba(239, 68, 68, 0.25)'
-      }}
-    >
-      <div
-        style={{
-          width: '48px',
-          height: '48px',
-          borderRadius: '50%',
-          backgroundColor: 'var(--danger)',
-          color: '#fff',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0
-        }}
-      >
-        <ShieldAlert size={28} />
+    <div className="p-5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl flex items-center gap-4 shadow-xs">
+      <div className="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center shrink-0">
+        <ShieldAlert size={24} />
       </div>
       <div>
-        <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--danger)', margin: '0 0 0.25rem 0' }}>
-          ALERTA: Violação de Integridade Detectada {tamperedIndex ? `(Lance #${tamperedIndex})` : ''}
-        </h4>
-        <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', margin: 0, opacity: 0.9 }}>
+        <h3 className="text-base font-extrabold text-red-700 dark:text-red-300 m-0 mb-1">
+          ALERTA: Adulteração Detectada no Banco de Dados {tamperedIndex ? `(Lance #${tamperedIndex})` : ''}
+        </h3>
+        <p className="text-xs text-slate-600 dark:text-slate-400 m-0 leading-relaxed">
           {message}
         </p>
       </div>

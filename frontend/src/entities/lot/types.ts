@@ -20,11 +20,27 @@ export interface Lot {
   updatedAt: string;
 }
 
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
+export interface PaginatedLotsResponse {
+  data: Lot[];
+  meta: PaginationMeta;
+}
+
 export interface LotFilters {
   status?: LotStatus;
   category?: string;
   search?: string;
   excludeCanceled?: boolean;
+  page?: number;
+  limit?: number;
 }
 
 export interface CreateLotPayload {

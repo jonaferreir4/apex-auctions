@@ -12,6 +12,22 @@ export function useLotsQuery(filters?: LotFilters) {
   });
 }
 
+export function usePaginatedLotsQuery(filters?: LotFilters) {
+  return useQuery({
+    queryKey: [...LOTS_QUERY_KEY, 'paginated', filters],
+    queryFn: () => lotService.getPaginatedLots(filters),
+    refetchInterval: 5000
+  });
+}
+
+export function useCategoriesQuery() {
+  return useQuery({
+    queryKey: [...LOTS_QUERY_KEY, 'categories'],
+    queryFn: lotService.getCategories,
+    refetchInterval: 10000
+  });
+}
+
 export function useMyLotsQuery(isAuctioneer: boolean) {
   return useQuery({
     queryKey: [...LOTS_QUERY_KEY, 'my-lots'],

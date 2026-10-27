@@ -16,24 +16,17 @@ export function WalletDisplay({ balance, onOpenDeposit, compact = false }: Walle
     return (
       <div
         onClick={onOpenDeposit}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.625rem',
-          backgroundColor: 'var(--bg-input)',
-          padding: '0.4rem 0.875rem',
-          borderRadius: 'var(--radius-full)',
-          border: '1px solid var(--border-color)',
-          cursor: onOpenDeposit ? 'pointer' : 'default',
-          transition: 'all var(--transition-fast)'
-        }}
+        title="Clique para adicionar saldo simulado"
+        className={`flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 transition-colors ${
+          onOpenDeposit ? 'cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700' : 'cursor-default'
+        }`}
       >
-        <Wallet size={16} color="var(--primary)" />
-        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+        <Wallet size={15} className="text-blue-600 dark:text-blue-400" />
+        <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
           {formatBRL(balance.availableBalance)}
         </span>
         {balance.committedBalance > 0 && (
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+          <span className="text-[11px] text-amber-600 dark:text-amber-400 font-semibold">
             (retido: {formatBRL(balance.committedBalance)})
           </span>
         )}
@@ -42,38 +35,33 @@ export function WalletDisplay({ balance, onOpenDeposit, compact = false }: Walle
   }
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: '1rem',
-        width: '100%'
-      }}
-    >
-      <div className="glass-panel" style={{ padding: '1.25rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Saldo Total</span>
-          <Wallet size={18} color="var(--primary)" />
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+      <div className="p-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-xs">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Saldo Total</span>
+          <Wallet size={18} className="text-blue-600 dark:text-blue-400" />
         </div>
-        <div style={{ fontSize: '1.5rem', fontWeight: 800 }}>{formatBRL(balance.totalBalance)}</div>
+        <div className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+          {formatBRL(balance.totalBalance)}
+        </div>
       </div>
 
-      <div className="glass-panel" style={{ padding: '1.25rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Saldo Comprometido</span>
-          <Lock size={18} color="var(--accent-gold)" />
+      <div className="p-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-xs">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Saldo em Custódia (Lances Ativos)</span>
+          <Lock size={18} className="text-amber-600 dark:text-amber-400" />
         </div>
-        <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--accent-gold)' }}>
+        <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">
           {formatBRL(balance.committedBalance)}
         </div>
       </div>
 
-      <div className="glass-panel" style={{ padding: '1.25rem', borderColor: 'rgba(16, 185, 129, 0.3)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Saldo Disponível</span>
-          <CheckCircle2 size={18} color="var(--status-live)" />
+      <div className="p-5 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 rounded-lg shadow-xs">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400">Saldo Disponível para Lances</span>
+          <CheckCircle2 size={18} className="text-emerald-600 dark:text-emerald-400" />
         </div>
-        <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--status-live)' }}>
+        <div className="text-2xl font-extrabold text-emerald-700 dark:text-emerald-400">
           {formatBRL(balance.availableBalance)}
         </div>
       </div>
