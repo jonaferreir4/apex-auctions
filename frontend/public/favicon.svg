@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 36" fill="none">
+  <path d="M19 2L10 20L19 23Z" fill="#6366F1" />
+  <path d="M19 2L19 23L28 20Z" fill="#06B6D4" />
+  <path d="M10 20L2 34L19 23Z" fill="#4F46E5" />
+  <path d="M28 20L19 23L36 34Z" fill="#3B82F6" />
+  <path d="M19 23L2 34L19 34Z" fill="#1E1B4B" />
+  <path d="M19 23L19 34L36 34Z" fill="#0284C7" />
+  <path d="M19 2L23 11L19 13Z" fill="#A5B4FC" opacity="0.8" />
+</svg>

@@ -4,57 +4,26 @@ export interface BadgeProps {
   children: React.ReactNode;
   variant?: 'live' | 'scheduled' | 'closed' | 'success' | 'danger' | 'warning' | 'info';
   className?: string;
-  style?: React.CSSProperties;
 }
 
-export function Badge({ children, variant = 'info', className = '', style }: BadgeProps) {
-  const variantStyles: Record<string, React.CSSProperties> = {
-    live: {
-      backgroundColor: 'var(--status-live-bg)',
-      color: 'var(--status-live)',
-      borderColor: 'rgba(16, 185, 129, 0.3)'
-    },
-    scheduled: {
-      backgroundColor: 'var(--status-scheduled-bg)',
-      color: 'var(--status-scheduled)',
-      borderColor: 'rgba(59, 130, 246, 0.3)'
-    },
-    closed: {
-      backgroundColor: 'var(--status-closed-bg)',
-      color: 'var(--status-closed)',
-      borderColor: 'rgba(107, 114, 128, 0.3)'
-    },
-    success: {
-      backgroundColor: 'rgba(16, 185, 129, 0.15)',
-      color: '#10b981',
-      borderColor: 'rgba(16, 185, 129, 0.3)'
-    },
-    danger: {
-      backgroundColor: 'var(--danger-bg)',
-      color: 'var(--danger)',
-      borderColor: 'rgba(239, 68, 68, 0.3)'
-    },
-    warning: {
-      backgroundColor: 'rgba(245, 158, 11, 0.15)',
-      color: '#f59e0b',
-      borderColor: 'rgba(245, 158, 11, 0.3)'
-    },
-    info: {
-      backgroundColor: 'rgba(59, 130, 246, 0.15)',
-      color: '#3b82f6',
-      borderColor: 'rgba(59, 130, 246, 0.3)'
-    }
-  };
+export function Badge({ children, variant = 'info', className = '' }: BadgeProps) {
+  const variantClasses = {
+    live: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/50',
+    scheduled: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
+    closed: 'bg-slate-50 text-slate-500 border-slate-200 dark:bg-slate-900/60 dark:text-slate-400 dark:border-slate-800',
+    success: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/50',
+    danger: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-800/50',
+    warning: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800/50',
+    info: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800/50'
+  }[variant];
 
   return (
     <span
-      className={`badge ${variant === 'live' ? 'badge-live' : ''} ${className}`}
-      style={{
-        border: '1px solid',
-        ...variantStyles[variant],
-        ...style
-      }}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${variantClasses} ${className}`}
     >
+      {variant === 'live' && (
+        <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+      )}
       {children}
     </span>
   );

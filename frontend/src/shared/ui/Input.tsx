@@ -4,43 +4,42 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   icon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
-export function Input({ label, error, icon, style, id, ...props }: InputProps) {
+export function Input({ label, error, icon, rightIcon, className = '', id, ...props }: InputProps) {
   const inputId = id || props.name || Math.random().toString(36).substring(7);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', width: '100%', textAlign: 'left' }}>
+    <div className="flex flex-col gap-1.5 w-full text-left">
       {label && (
-        <label htmlFor={inputId} style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+        <label htmlFor={inputId} className="text-xs font-semibold text-slate-700 dark:text-slate-300">
           {label}
         </label>
       )}
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+      <div className="relative flex items-center w-full">
         {icon && (
-          <div style={{ position: 'absolute', left: '0.875rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+          <div className="absolute left-3.5 text-slate-400 dark:text-slate-500 flex items-center pointer-events-none">
             {icon}
           </div>
         )}
         <input
           id={inputId}
-          style={{
-            width: '100%',
-            padding: icon ? '0.65rem 0.875rem 0.65rem 2.5rem' : '0.65rem 0.875rem',
-            backgroundColor: 'var(--bg-input)',
-            color: 'var(--text-primary)',
-            border: `1px solid ${error ? 'var(--danger)' : 'var(--border-color)'}`,
-            borderRadius: 'var(--radius-md)',
-            fontSize: '0.95rem',
-            outline: 'none',
-            transition: 'border-color var(--transition-fast)',
-            ...style
-          }}
+          className={`w-full py-2 bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 border ${
+            error ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-blue-600 focus:ring-1 focus:ring-blue-600'
+          } rounded-md text-sm outline-none transition-colors duration-150 ${
+            icon ? 'pl-10' : 'pl-3'
+          } ${rightIcon ? 'pr-11' : 'pr-3'} ${className}`}
           {...props}
         />
+        {rightIcon && (
+          <div className="absolute right-3.5 text-slate-400 dark:text-slate-500 flex items-center">
+            {rightIcon}
+          </div>
+        )}
       </div>
       {error && (
-        <span style={{ fontSize: '0.75rem', color: 'var(--danger)', fontWeight: 500 }}>
+        <span className="text-xs font-medium text-red-500 pl-2">
           {error}
         </span>
       )}
