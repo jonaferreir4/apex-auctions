@@ -7,7 +7,7 @@ import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
 import { ExternalItemCard } from '@/entities/external-item/ui/ExternalItemCard';
 import { formatBRL } from '@/shared/lib/formatters';
-import { Search, Plus, Calendar, DollarSign, PackageSearch, SlidersHorizontal, ArrowRight, ArrowLeft, Flame, Clock } from 'lucide-react';
+import { Search, Plus, Calendar, DollarSign, PackageSearch, SlidersHorizontal, ArrowRight, ArrowLeft, Clock } from 'lucide-react';
 
 export interface CreateLotModalProps {
   isOpen: boolean;
@@ -352,7 +352,7 @@ export function CreateLotModal({ isOpen, onClose }: CreateLotModalProps) {
                       : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700 hover:bg-slate-100'
                   }`}
                 >
-                  <Flame size={15} className={publishMode === 'AO_VIVO' ? 'text-red-600' : 'text-slate-400'} />
+                  <span className={`w-2 h-2 rounded-full shrink-0 ${publishMode === 'AO_VIVO' ? 'bg-red-600 animate-pulse' : 'bg-slate-400'}`} />
                   Iniciar Ao Vivo Imediatamente
                 </button>
 

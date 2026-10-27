@@ -3,7 +3,7 @@ import { Lot } from '@/entities/lot/types';
 import { formatBRL } from '@/shared/lib/formatters';
 import { LotCountdown } from '@/entities/lot/ui/LotCountdown';
 import { Button } from '@/shared/ui/Button';
-import { Flame, Calendar, Gavel, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { Calendar, Gavel, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 
 export interface FeaturedLotsHeroProps {
   lots: Lot[];

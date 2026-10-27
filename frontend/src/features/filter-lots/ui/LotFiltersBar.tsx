@@ -1,7 +1,7 @@
 import React from 'react';
 import { LotStatus } from '@/entities/lot/types';
 import { Input } from '@/shared/ui/Input';
-import { Search, Flame, Calendar, CheckCircle2, LayoutGrid } from 'lucide-react';
+import { Search, Calendar, CheckCircle2, LayoutGrid } from 'lucide-react';
 
 export interface LotFiltersBarProps {
   currentStatus?: LotStatus | 'TODOS';
@@ -18,7 +18,7 @@ export function LotFiltersBar({
 }: LotFiltersBarProps) {
   const tabs: Array<{ id: LotStatus | 'TODOS'; label: string; icon: React.ReactNode }> = [
     { id: 'TODOS', label: 'Todos os Lotes', icon: <LayoutGrid size={15} /> },
-    { id: 'AO_VIVO', label: 'Ao Vivo', icon: <Flame size={15} /> },
+    { id: 'AO_VIVO', label: 'Ao Vivo', icon: <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0" /> },
     { id: 'AGENDADO', label: 'Agendados', icon: <Calendar size={15} /> },
     { id: 'ENCERRADO', label: 'Encerrados', icon: <CheckCircle2 size={15} /> }
   ];

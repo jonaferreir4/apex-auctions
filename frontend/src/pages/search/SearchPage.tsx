@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useLotsQuery } from '@/entities/lot/model/useLotQueries';
 import { LotStatus } from '@/entities/lot/types';
 import { LotCard } from '@/entities/lot/ui/LotCard';
-import { Search, Flame, Calendar, CheckCircle2, LayoutGrid, ArrowUpDown, X, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Calendar, CheckCircle2, LayoutGrid, ArrowUpDown, X, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 
 type SortOption = 'RELEVANCIA' | 'MENOR_VALOR' | 'MAIOR_VALOR' | 'RECENTES';
 
@@ -84,7 +84,7 @@ export function SearchPage() {
 
   const statusTabs: Array<{ id: LotStatus | 'TODOS'; label: string; icon: React.ReactNode }> = [
     { id: 'TODOS', label: 'Todos os Status', icon: <LayoutGrid size={15} /> },
-    { id: 'AO_VIVO', label: 'Ao Vivo', icon: <Flame size={15} /> },
+    { id: 'AO_VIVO', label: 'Ao Vivo', icon: <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0" /> },
     { id: 'AGENDADO', label: 'Agendados', icon: <Calendar size={15} /> },
     { id: 'ENCERRADO', label: 'Encerrados', icon: <CheckCircle2 size={15} /> }
   ];

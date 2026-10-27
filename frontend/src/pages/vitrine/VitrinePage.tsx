@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLotsQuery } from '@/entities/lot/model/useLotQueries';
 import { LotCard } from '@/entities/lot/ui/LotCard';
 import { FeaturedLotsHero } from '@/widgets/featured-hero/FeaturedLotsHero';
-import { Flame, Calendar, CheckCircle2 } from 'lucide-react';
+import { Calendar, CheckCircle2 } from 'lucide-react';
 
 export function VitrinePage() {
   const navigate = useNavigate();
@@ -39,23 +39,22 @@ export function VitrinePage() {
         <div className="flex flex-col gap-12">
           <section className="flex flex-col gap-5">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
-              <div className="flex items-center gap-2.5">
-                <div className="relative flex items-center justify-center">
-                  <span className="w-3 h-3 rounded-full bg-red-500 animate-ping absolute opacity-75" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-600 relative" />
-                </div>
+              <div className="flex items-center gap-3">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
+                </span>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                    <Flame size={20} className="text-red-500" />
-                    Leilões Ao Vivo Agora
+                  <h2 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+                    Pregões Ao Vivo
                   </h2>
                   <span className="text-xs text-slate-500 dark:text-slate-400">
-                    Pregões em andamento recebendo lances em tempo real
+                    Lotes em andamento recebendo propostas em tempo real
                   </span>
                 </div>
               </div>
               <span className="text-xs font-semibold px-2.5 py-1 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 rounded-full">
-                {liveLots.length} {liveLots.length === 1 ? 'ao vivo' : 'ao vivo'}
+                {liveLots.length} {liveLots.length === 1 ? 'lote ao vivo' : 'lotes ao vivo'}
               </span>
             </div>
 
