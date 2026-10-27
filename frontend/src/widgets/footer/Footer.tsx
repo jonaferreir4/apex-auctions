@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/app/providers/AuthProvider';
 import { Logo } from '@/shared/ui/Logo';
-import { ShieldCheck, ExternalLink } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 export function Footer() {
   const { user } = useAuth();
@@ -112,16 +112,6 @@ export function Footer() {
               </li>
               <li>
                 <span className="text-slate-400 text-xs">Segunda a Sexta, 09h às 18h</span>
-              </li>
-              <li className="mt-1">
-                <a
-                  href="http://localhost:3001/api/docs"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 inline-flex items-center gap-1 font-semibold text-xs hover:underline"
-                >
-                  Documentação Swagger da API <ExternalLink size={12} />
-                </a>
               </li>
             </ul>
           </div>

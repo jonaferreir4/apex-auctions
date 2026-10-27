@@ -75,16 +75,8 @@ export function LoginPage() {
         )}
       </div>
 
-      <div className="w-full max-w-lg flex flex-wrap justify-between items-center gap-4 text-xs text-slate-400 p-4">
+      <div className="w-full max-w-lg text-center text-xs text-slate-400 p-4">
         <span>© 2026 Apex Auctions S.A. Todos os direitos reservados.</span>
-        <a
-          href="http://localhost:3001/api/docs"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-        >
-          Swagger Docs
-        </a>
       </div>
     </div>
   );
