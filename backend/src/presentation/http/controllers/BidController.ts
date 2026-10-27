@@ -33,7 +33,8 @@ export class BidController {
 
   listBids = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-      const bids = await this.listLotBidsUseCase.execute(req.params.id, true);
+      const limit = req.query.limit ? Math.max(1, parseInt(req.query.limit as string, 10)) : undefined;
+      const bids = await this.listLotBidsUseCase.execute(req.params.id, true, limit);
       return res.status(200).json(bids);
     } catch (err) {
       next(err);

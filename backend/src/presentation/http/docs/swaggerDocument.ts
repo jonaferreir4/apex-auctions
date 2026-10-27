@@ -102,7 +102,9 @@ export const swaggerDocument = {
         parameters: [
           { name: 'status', in: 'query', schema: { type: 'string', enum: ['AGENDADO', 'AO_VIVO', 'ENCERRADO'] } },
           { name: 'category', in: 'query', schema: { type: 'string' } },
-          { name: 'search', in: 'query', schema: { type: 'string' } }
+          { name: 'search', in: 'query', schema: { type: 'string' } },
+          { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
+          { name: 'limit', in: 'query', schema: { type: 'integer', default: 10 } }
         ],
         responses: {
           200: { description: 'Lista de lotes' }
@@ -175,7 +177,10 @@ export const swaggerDocument = {
       get: {
         summary: 'Histórico de lances de um lote (identificadores anonimizados)',
         tags: ['Bids'],
-        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+        parameters: [
+          { name: 'id', in: 'path', required: true, schema: { type: 'string' } },
+          { name: 'limit', in: 'query', schema: { type: 'integer', default: 20 }, description: 'Limite de lances mais recentes a retornar' }
+        ],
         responses: {
           200: { description: 'Lista cronológica de lances' }
         }
