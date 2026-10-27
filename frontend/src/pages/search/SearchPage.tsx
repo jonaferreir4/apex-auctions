@@ -89,6 +89,27 @@ export function SearchPage() {
     { id: 'ENCERRADO', label: 'Encerrados', icon: <CheckCircle2 size={15} /> }
   ];
 
+  const getVisiblePages = (current: number, total: number): (number | 'ellipsis')[] => {
+    if (total <= 5) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+    const pages: (number | 'ellipsis')[] = [];
+    pages.push(1);
+    if (current > 3) {
+      pages.push('ellipsis');
+    }
+    const start = Math.max(2, current - 1);
+    const end = Math.min(total - 1, current + 1);
+    for (let p = start; p <= end; p++) {
+      pages.push(p);
+    }
+    if (current < total - 2) {
+      pages.push('ellipsis');
+    }
+    pages.push(total);
+    return pages;
+  };
+
   const startRecord = (safePage - 1) * pageSize + 1;
   const endRecord = Math.min(safePage * pageSize, totalItems);
 
@@ -230,7 +251,7 @@ export function SearchPage() {
                 Mostrando <strong className="text-slate-800 dark:text-slate-200">{startRecord}</strong> a <strong className="text-slate-800 dark:text-slate-200">{endRecord}</strong> de <strong className="text-slate-800 dark:text-slate-200">{totalItems}</strong> lotes
               </span>
 
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 flex-wrap justify-center">
                 <button
                   type="button"
                   onClick={() => handlePageChange(safePage - 1)}
@@ -242,20 +263,29 @@ export function SearchPage() {
                 </button>
 
                 <div className="flex items-center gap-1">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
-                      key={page}
-                      type="button"
-                      onClick={() => handlePageChange(page)}
-                      className={`w-8 h-8 rounded-md text-xs font-bold transition-colors cursor-pointer ${
-                        safePage === page
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
+                  {getVisiblePages(safePage, totalPages).map((item, idx) => {
+                    if (item === 'ellipsis') {
+                      return (
+                        <span key={`ellipsis-${idx}`} className="px-1.5 text-xs text-slate-400">
+                          …
+                        </span>
+                      );
+                    }
+                    return (
+                      <button
+                        key={item}
+                        type="button"
+                        onClick={() => handlePageChange(item)}
+                        className={`w-8 h-8 rounded-md text-xs font-bold transition-colors cursor-pointer ${
+                          safePage === item
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        {item}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 <button
