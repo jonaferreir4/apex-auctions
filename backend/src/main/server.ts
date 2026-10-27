@@ -5,9 +5,7 @@ import { buildContainer } from './container';
 import { createApp } from './app';
 import { setupSocketHandlers } from '../presentation/websocket/socketHandler';
 
-const server = http.createServer();
-
-const io = new SocketIOServer(server, {
+const io = new SocketIOServer({
   cors: {
     origin: env.CORS_ORIGIN === '*' ? true : env.CORS_ORIGIN,
     methods: ['GET', 'POST']
@@ -18,7 +16,9 @@ const container = buildContainer(io);
 setupSocketHandlers(io, container.tokenService);
 
 const app = createApp(container);
-server.on('request', app);
+const server = http.createServer(app);
+
+io.attach(server);
 
 const LOT_CHECK_INTERVAL_MS = 5000;
 setInterval(async () => {

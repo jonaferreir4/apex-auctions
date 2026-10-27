@@ -140,6 +140,42 @@ async function main() {
     }
   });
 
+  await prisma.lot.create({
+    data: {
+      title: 'Miniatura Rara Shelby Cobra 427 S/C (1:18)',
+      description: 'Edição limitada comemorativa de colecionador em metal fundido com portas e capô articulados.',
+      imageUrl: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&auto=format&fit=crop&q=80',
+      category: 'Colecionáveis',
+      itemAttributes: { escala: '1:18', edicao: '342/1000', acabamento: 'Guardsman Blue' },
+      status: 'AGENDADO',
+      initialPrice: 850,
+      minIncrement: 50,
+      currentPrice: 0,
+      currentLeaderId: null,
+      auctioneerId: auctioneer.id,
+      startTime: oneHourAhead,
+      endTime: twentyFourHoursAhead
+    }
+  });
+
+  await prisma.lot.create({
+    data: {
+      title: 'Vinil The Dark Side of the Moon - Edição Japonesa Original',
+      description: 'Prensagem audiófila de 1973 com encarte duplo, OBI intacto e pôsteres comemorativos.',
+      imageUrl: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=800&auto=format&fit=crop&q=80',
+      category: 'Discos & Música',
+      itemAttributes: { selo: 'Harvest / Toshiba-EMI', prensagem: '1973', estado: 'Impecável' },
+      status: 'AGENDADO',
+      initialPrice: 1100,
+      minIncrement: 100,
+      currentPrice: 0,
+      currentLeaderId: null,
+      auctioneerId: auctioneer.id,
+      startTime: oneHourAhead,
+      endTime: twentyFourHoursAhead
+    }
+  });
+
   const twoDaysAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
   const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
