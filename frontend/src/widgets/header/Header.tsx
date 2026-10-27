@@ -6,7 +6,18 @@ import { useWalletQuery } from '@/entities/wallet/model/useWalletQueries';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 import { DepositFundsModal } from '@/features/deposit-funds/ui/DepositFundsModal';
 import { Logo } from '@/shared/ui/Logo';
-import { Award, LogOut, LayoutDashboard, Search, ChevronDown } from 'lucide-react';
+import {
+  Award,
+  LogOut,
+  LayoutDashboard,
+  Search,
+  ChevronDown,
+  Menu,
+  X,
+  Wallet,
+  LogIn,
+  Home
+} from 'lucide-react';
 
 export interface HeaderProps {
   user: User | null;
@@ -16,8 +27,12 @@ export interface HeaderProps {
 export function Header({ user, onLogout }: HeaderProps) {
   const [isDepositOpen, setIsDepositOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const searchInputMobileRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -35,6 +50,11 @@ export function Header({ user, onLogout }: HeaderProps) {
   }, [location.pathname, searchParams]);
 
   useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsMobileSearchOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setIsUserMenuOpen(false);
@@ -44,8 +64,15 @@ export function Header({ user, onLogout }: HeaderProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (isMobileSearchOpen && searchInputMobileRef.current) {
+      searchInputMobileRef.current.focus();
+    }
+  }, [isMobileSearchOpen]);
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsMobileSearchOpen(false);
     if (searchValue.trim()) {
       navigate(`/busca?q=${encodeURIComponent(searchValue.trim())}`);
     } else {
@@ -55,31 +82,31 @@ export function Header({ user, onLogout }: HeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-17 gap-6">
+      <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-xs transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-3 sm:gap-6">
           <div className="flex items-center shrink-0">
-            <Link to="/" className="inline-flex items-center">
-              <Logo className="h-7" />
+            <Link to="/" className="inline-flex items-center focus:outline-none">
+              <Logo className="h-6 sm:h-7" />
             </Link>
           </div>
 
           <form
             onSubmit={handleSearchSubmit}
-            className="flex-1 max-w-md flex items-center relative"
+            className="hidden md:flex flex-1 max-w-md items-center relative"
           >
             <span className="absolute left-3.5 flex items-center text-slate-400 pointer-events-none">
               <Search size={18} />
             </span>
             <input
               type="text"
-              placeholder="Procurar por lote, marca, modelo, artista..."
+              placeholder="Buscar por lote, marca, modelo, artista..."
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               className="w-full h-10 pl-10 pr-4 text-sm bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-slate-900 transition-colors"
             />
           </form>
 
-          <nav className="flex items-center gap-4 shrink-0">
+          <nav className="hidden md:flex items-center gap-3 shrink-0">
             {isAuctioneer && (
               <Link
                 to="/painel"
@@ -194,14 +221,221 @@ export function Header({ user, onLogout }: HeaderProps) {
                 <button
                   type="button"
                   onClick={() => navigate('/login')}
-                  className="h-10 px-5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-semibold inline-flex items-center justify-center whitespace-nowrap transition-colors cursor-pointer shadow-xs"
+                  className="h-9 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-semibold inline-flex items-center justify-center whitespace-nowrap transition-colors cursor-pointer shadow-xs"
                 >
                   Entrar / Cadastrar
                 </button>
               )}
             </div>
           </nav>
+
+          <div className="flex md:hidden items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+              className="w-9 h-9 rounded-md flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              title="Buscar lotes"
+              aria-label="Buscar"
+            >
+              <Search size={18} />
+            </button>
+
+            <ThemeToggle />
+
+            {user ? (
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="flex items-center gap-1 p-1 rounded-md text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                aria-label="Menu do usuário"
+              >
+                <div
+                  className={`w-7 h-7 rounded-full text-white font-bold flex items-center justify-center text-xs ${
+                    user.role === 'LEILOEIRO' ? 'bg-amber-600' : 'bg-blue-600'
+                  }`}
+                >
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+              </button>
+            ) : (
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => navigate('/login')}
+                  className="h-8 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-semibold inline-flex items-center justify-center whitespace-nowrap transition-colors cursor-pointer shadow-xs"
+                >
+                  Entrar
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="w-8 h-8 rounded-md flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                  aria-label="Abrir menu"
+                >
+                  {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
+
+        {isMobileSearchOpen && (
+          <div className="md:hidden border-t border-slate-200 dark:border-slate-800 px-4 py-2.5 bg-slate-50 dark:bg-slate-900/90 animate-fadeIn">
+            <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  ref={searchInputMobileRef}
+                  type="text"
+                  placeholder="Buscar por lote, marca, modelo..."
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  className="w-full h-9 pl-9 pr-3 text-xs bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-600"
+                />
+              </div>
+              <button
+                type="submit"
+                className="h-9 px-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-semibold shrink-0 cursor-pointer"
+              >
+                Buscar
+              </button>
+            </form>
+          </div>
+        )}
+
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-4 space-y-4 shadow-lg animate-fadeIn">
+            {user && (
+              <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700/60">
+                <div
+                  className={`w-10 h-10 rounded-full text-white font-bold flex items-center justify-center text-sm shrink-0 ${
+                    user.role === 'LEILOEIRO' ? 'bg-amber-600' : 'bg-blue-600'
+                  }`}
+                >
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
+                    {user.name}
+                  </span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                    {user.email}
+                  </span>
+                  <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 mt-0.5">
+                    {user.role === 'LEILOEIRO' ? 'Leiloeiro Oficial' : 'Licitante Ativo'}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {isBidder && (
+              <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700/60 space-y-2.5">
+                <div className="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  <span className="flex items-center gap-1.5">
+                    <Wallet size={14} className="text-blue-600" />
+                    Carteira Virtual
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      setIsDepositOpen(true);
+                    }}
+                    className="text-blue-600 dark:text-blue-400 hover:underline font-bold"
+                  >
+                    + Depositar
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded border border-slate-200 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block">Disponível</span>
+                    <span className="font-extrabold text-emerald-600 dark:text-emerald-400">
+                      R$ {walletBalance?.availableBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) || '0,00'}
+                    </span>
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded border border-slate-200 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block">Comprometido</span>
+                    <span className="font-extrabold text-amber-600 dark:text-amber-400">
+                      R$ {walletBalance?.committedBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) || '0,00'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-1 pt-1">
+              <Link
+                to="/"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <Home size={16} className="text-slate-500" />
+                Início (Vitrine de Lotes)
+              </Link>
+
+              <Link
+                to="/busca"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <Search size={16} className="text-slate-500" />
+                Catálogo & Busca de Lotes
+              </Link>
+
+              {isAuctioneer && (
+                <Link
+                  to="/painel"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/40 transition-colors"
+                >
+                  <LayoutDashboard size={16} />
+                  Painel do Leiloeiro
+                </Link>
+              )}
+
+              {isBidder && (
+                <Link
+                  to="/arremates"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                >
+                  <Award size={16} className="text-amber-600" />
+                  Meus Arremates & Comprovantes
+                </Link>
+              )}
+            </div>
+
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+              {user ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onLogout();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 rounded-md hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
+                >
+                  <LogOut size={14} />
+                  Sair da Conta
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    navigate('/login');
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors shadow-xs"
+                >
+                  <LogIn size={14} />
+                  Entrar ou Criar Conta
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </header>
 
       {isBidder && (
