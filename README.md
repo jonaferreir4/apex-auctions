@@ -56,12 +56,23 @@ Localizado em `frontend/`:
 Para garantir que o leiloeiro ou invasores do banco de dados não possam inserir lances retroativos, alterar valores ou apagar propostas, cada lance possui um campo `hash` e um campo `previousHash`:
 
 1. **Bloco Gênese**:
-   Ao criar o lote, define-se a raiz criptográfica:
-   $$\text{genesisHash} = \text{SHA256}(\text{"GENESIS\_LOT\_"} + \text{lotId})$$
-2. **Encadeamento Matemático**:
-   Para o $n$-ésimo lance ($n \ge 1$):
-   $$\text{hash}_n = \text{SHA256}(\text{previousHash}_n + \text{":"} + \text{bidId}_n + \text{":"} + \text{lotId}_n + \text{":"} + \text{bidderId}_n + \text{":"} + \text{amount}_n\text{.toFixed(2)} + \text{":"} + \text{createdAt}_n\text{.toISOString()})$$
-   Onde $\text{previousHash}_1 = \text{genesisHash}$, e para $n > 1$, $\text{previousHash}_n = \text{hash}_{n-1}$.
+   Ao criar o lote, define-se a raiz criptográfica única:
+   ```
+   genesisHash = SHA256("GENESIS_LOT_" + lotId)
+   ```
+
+2. **Encadeamento Criptográfico**:
+   Para o primeiro lance ($n = 1$):
+   - `previousHash = genesisHash`
+
+   Para cada lance subsequente ($n > 1$):
+   - `previousHash = hash_anterior`
+
+   O hash canônico de cada lance é gerado pela concatenação estrita dos seus atributos:
+   ```
+   hash = SHA256(previousHash + ":" + bidId + ":" + lotId + ":" + bidderId + ":" + amount.toFixed(2) + ":" + createdAt.toISOString())
+   ```
+
 3. **Auditoria em Tempo de Execução (`VerifyLotAuditUseCase`)**:
    O caso de uso reconstrói a cadeia a partir do bloco gênese, recalcula cada hash e valida:
    - Se `recalculatedHash === storedHash` (o conteúdo não foi adulterado).
