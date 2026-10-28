@@ -1,15 +1,28 @@
 {
   "info": {
-    "name": "Casa de Leilões Verzel - API",
-    "description": "Collection completa para testar todos os endpoints da Casa de Leilões no Postman.",
+    "name": "Apex Auctions - API Collection",
+    "description": "Collection completa para testar todos os endpoints da API Apex Auctions no Postman, cobrindo autenticação, lotes, lances em tempo real, auditoria de hash chain, carteira, recibos e integração externa.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     { "key": "baseUrl", "value": "http://localhost:3001" },
+    { "key": "prodUrl", "value": "https://apex-auctions-backend.onrender.com" },
     { "key": "token", "value": "" },
     { "key": "lotId", "value": "" }
   ],
   "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check (/health)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/health"
+          }
+        }
+      ]
+    },
     {
       "name": "Auth",
       "item": [
@@ -86,6 +99,18 @@
           }
         },
         {
+          "name": "Cadastrar Novo Usuário (/auth/register)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Novo Licitante Teste\",\n  \"email\": \"novo.licitante@verzel.com\",\n  \"password\": \"password123\",\n  \"role\": \"LICITANTE\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/register"
+          }
+        },
+        {
           "name": "Meu Perfil (/auth/me)",
           "request": {
             "method": "GET",
@@ -99,7 +124,7 @@
       "name": "Lots",
       "item": [
         {
-          "name": "Listar Vitrine de Lotes",
+          "name": "Listar Todos os Lotes",
           "event": [
             {
               "listen": "test",
@@ -120,7 +145,29 @@
           }
         },
         {
-          "name": "Detalhes do Lote",
+          "name": "Listar Lotes com Paginação (?page=1&limit=5)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lots?page=1&limit=5"
+          }
+        },
+        {
+          "name": "Listar Categorias de Lotes",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lots/categories"
+          }
+        },
+        {
+          "name": "Listar Lotes do Leiloeiro (/lots/my-lots)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/lots/my-lots"
+          }
+        },
+        {
+          "name": "Detalhes de um Lote",
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/api/lots/{{lotId}}"
@@ -136,7 +183,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Relógio Cronógrafo Suíço Vintage 1968\",\n  \"description\": \"Peça de alta relojoaria com mecanismo mecânico automático em ouro 18k.\",\n  \"imageUrl\": \"https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=800\",\n  \"category\": \"Relógios & Joias\",\n  \"initialPrice\": 4800,\n  \"minIncrement\": 300,\n  \"startTime\": \"2026-10-24T20:00:00.000Z\",\n  \"endTime\": \"2026-10-25T20:00:00.000Z\"\n}"
+              "raw": "{\n  \"title\": \"Relógio Cronógrafo Suíço Vintage 1968\",\n  \"description\": \"Peça de alta relojoaria mecânica com caixa em ouro 18k e pulseira de couro.\",\n  \"imageUrl\": \"https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=800\",\n  \"category\": \"Relógios & Joias\",\n  \"initialPrice\": 4800,\n  \"minIncrement\": 300,\n  \"startTime\": \"2026-10-28T10:00:00.000Z\",\n  \"endTime\": \"2026-10-29T18:00:00.000Z\"\n}"
             },
             "url": "{{baseUrl}}/api/lots"
           }
@@ -162,7 +209,14 @@
           }
         },
         {
-          "name": "Dar Lance (Licitante)",
+          "name": "Histórico de Lances com Limite (?limit=10)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/lots/{{lotId}}/bids?limit=10"
+          }
+        },
+        {
+          "name": "Dar Lance ao Vivo (Licitante)",
           "request": {
             "method": "POST",
             "header": [
@@ -177,7 +231,7 @@
           }
         },
         {
-          "name": "Auditoria Criptográfica (Pública)",
+          "name": "Auditoria Criptográfica da Hash Chain (Pública)",
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/api/lots/{{lotId}}/audit"
@@ -189,7 +243,7 @@
       "name": "Wallet",
       "item": [
         {
-          "name": "Consultar Saldo da Carteira",
+          "name": "Consultar Saldo da Carteira (Disponível e Comprometido)",
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
@@ -197,7 +251,7 @@
           }
         },
         {
-          "name": "Depósito Simulado",
+          "name": "Depósito de Saldo",
           "request": {
             "method": "POST",
             "header": [
@@ -217,7 +271,7 @@
       "name": "Receipts & External Items",
       "item": [
         {
-          "name": "Meus Arremates (Comprovantes)",
+          "name": "Meus Arremates (/receipts/me)",
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
@@ -225,14 +279,14 @@
           }
         },
         {
-          "name": "Comprovante Público por Token",
+          "name": "Certificado Digital Público por Token",
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/api/receipts/share/recibo-demo-dom-casmurro-1899"
           }
         },
         {
-          "name": "Buscar Itens na API Externa",
+          "name": "Buscar Itens na API Externa (DummyJSON)",
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],

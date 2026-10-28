@@ -182,9 +182,15 @@ O backend conta com testes unitários cobrindo o core de domínio e regras de ne
 - `tests/userEntity.test.ts`:
   - Encriptação de senhas, validação de e-mail e regras de perfil.
 
-Para rodar os testes:
+Para rodar os testes do backend (13 testes unitários):
 ```bash
 cd backend
+npm test
+```
+
+O frontend também conta com testes unitários cobrindo formatadores monetários, cálculos de expiração de leilão e truncamento de hashes criptográficos (`frontend/src/shared/lib/formatters.test.ts`):
+```bash
+cd frontend
 npm test
 ```
 
