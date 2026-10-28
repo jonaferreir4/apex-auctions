@@ -214,29 +214,6 @@ Acesse a documentação interativa Swagger completa em: `/api/docs`
 
 ---
 
-## Relato do Uso de Ferramentas de Inteligência Artificial
-
-> Em conformidade com o edital do Desafio Técnico Verzel Elite Dev 2026, documentamos a seguir como a Inteligência Artificial foi incorporada no ciclo de desenvolvimento deste projeto.
-
-### 1. Ferramentas Utilizadas
-- **Claude / Gemini (Antigravity IDE Assistant)**: Atuou como copiloto de engenharia full-stack, auxiliando no planejamento arquitetural, geração de boilerplate de testes e revisão de tipagem.
-
-### 2. Onde a IA Agregou Alta Produtividade
-- **Estruturação de Clean Architecture e Tipos**: Agilizou a escrita de dezenas de contratos (`Entities`, `Repositories`, `UseCases`, `DTOs`), garantindo que o domínio permanecesse 100% puro e isolado da infraestrutura.
-- **Implementação da Hash Chain Criptográfica**: Geração precisa da fórmula de hashing canônico SHA-256 no backend e sincronização correspondente no relatório de auditoria pública no frontend.
-- **Design System e Telas**: Suporte na criação dos tokens CSS, responsividade mobile (off-canvas drawer) e alternância nativa entre modo claro e escuro.
-- **Cenários de Teste**: Geração rápida de fixtures e casos de borda nos testes de concorrência e regras de lances (anti-sniping, validação de incremento, saldo comprometido).
-
-### 3. Onde Exigiu Revisão Crítica e Intervenção Humana
-- **Concorrência e atomicidade financeira**: As primeiras sugestões realizavam verificações de saldo em etapas separadas, o que poderia permitir condições de corrida (*race conditions*) com dois lances simultâneos. Foi necessário intervir e estruturar uma transação atômica que calcula o saldo retido de outros lotes ativos antes de comprometer novos fundos.
-- **Fechamento de Lotes e Anti-Sniping**: A sincronização entre o timer reativo de tela e a rotina de background no backend exigiu calibração para garantir que o prolongamento de 2 minutos seja refletido tanto via WebSocket quanto persistido no banco para consumidores subsequentes.
-- **Resiliência da API de Terceiros (DummyJSON)**: Garantir que a falha de conectividade ou rate limit da API externa nunca interrompa o catálogo interno ou impeça a criação manual de lotes.
-
-### 4. Conclusão
-O desenvolvimento assistido por IA multiplicou a velocidade de entrega do boilerplate, documentação e testes, permitindo ao desenvolvedor focar no que realmente diferencia um produto de alta qualidade: consistência de regras de negócio, segurança criptográfica e refinamento da experiência do usuário.
-
----
-
 ## Autor
 - **Candidato**: Jona Ferreira de Sousa
 - **GitHub**: https://github.com/jonaferreir4
