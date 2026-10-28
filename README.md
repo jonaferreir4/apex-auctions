@@ -144,14 +144,14 @@ O banco de dados já possui contas prontas para teste através da tela de Login:
 
 | Perfil | Nome | E-mail | Senha | Saldo Inicial |
 | :--- | :--- | :--- | :--- | :--- |
-| Leiloeiro | Carlos Leiloeiro | `leiloeiro@verzel.com` | `password123` | N/A (Cria e gerencia lotes) |
-| Licitante 1 | Marina Silva | `licitante1@verzel.com` | `password123` | R$ 15.000,00 |
-| Licitante 2 | Roberto Santos | `licitante2@verzel.com` | `password123` | R$ 20.000,00 |
+| Leiloeiro | Carlos Leiloeiro Oficial | `leiloeiro@verzel.com` | `password123` | N/A (Cria e gerencia lotes) |
+| Licitante 1 | Marina Silva | `licitante1@verzel.com` | `password123` | R$ 11.500,00 |
+| Licitante 2 | Roberto Lins | `licitante2@verzel.com` | `password123` | R$ 20.000,00 (R$ 2.800 comprometido) |
 
 ### Cenários de Lote já Seedados:
-- **Lote 1 (Ao Vivo)**: *iPhone 15 Pro Max Titanium* — com 2 lances prévios encadeados e licitante 2 como líder ativo.
-- **Lote 2 (Agendado)**: *MacBook Pro M3 Max 16"* — programado para abrir automaticamente.
-- **Lote 3 (Encerrado)**: *Sony WH-1000XM5 Noise Canceling* — arrematado com recibo emitido e token público de compartilhamento pronto para teste.
+- **Ao Vivo**: *Pintura Óleo sobre Tela: "Noite Estrelada no Vale"* — com 2 lances prévios encadeados (SHA-256) e Roberto Lins como líder ativo (R$ 2.800,00).
+- **Agendados**: *Relógio Cronógrafo Suíço Vintage 1968*, *Miniatura Rara Shelby Cobra 427 S/C* e *Vinil The Dark Side of the Moon*.
+- **Encerrado**: *Primeira Edição: Dom Casmurro (1899)* — arrematado por Marina Silva por R$ 3.500,00 com certificado digital emitido (`recibo-demo-dom-casmurro-1899`).
 
 ---
 
