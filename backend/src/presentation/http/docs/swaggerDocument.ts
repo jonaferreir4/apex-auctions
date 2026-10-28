@@ -7,8 +7,16 @@ export const swaggerDocument = {
   },
   servers: [
     {
+      url: '/',
+      description: 'Servidor Atual (Automático)'
+    },
+    {
+      url: 'https://apex-auctions-backend.onrender.com',
+      description: 'Ambiente de Produção (Render)'
+    },
+    {
       url: 'http://localhost:3001',
-      description: 'Servidor Local de Desenvolvimento'
+      description: 'Ambiente Local (Desenvolvimento)'
     }
   ],
   components: {
